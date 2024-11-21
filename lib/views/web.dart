@@ -103,7 +103,6 @@ class _WebState extends State<Web> {
 
   @override
   Widget build(BuildContext context) {
-    log("PocketOptions: ${widget.pocketOptions}");
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

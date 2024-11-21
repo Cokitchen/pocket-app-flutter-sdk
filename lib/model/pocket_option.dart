@@ -5,7 +5,7 @@ class PocketOption {
   final String? reference;
   final String? gatewayReference;
   final String? narration;
-  final Map<String, String>? meta;
+  final Map<String, dynamic>? meta;
   final int? amount;
   final Function(String data)? onSuccess;
   final Function(String message)? onError;
