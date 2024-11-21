@@ -1,4 +1,8 @@
-String buildPocketWithOptions({Map<String, dynamic>? pocketOptions}) => """
+import 'dart:convert';
+
+import 'package:pocket_app_flutter_sdk/model/pocket_option.dart';
+
+String buildPocketWithOptions({required PocketOption pocketOptions}) => """
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,37 +21,37 @@ String buildPocketWithOptions({Map<String, dynamic>? pocketOptions}) => """
     <script>
       function paynow() {
         const pockett = new Pocket({
-          key: "TPM_TEST_7bQG1GAUbc7PSzZ8oPYY45Gm17tlhYmxUVi",
-          mode: "test",
+          key: "${pocketOptions.key}",
+          mode: "${pocketOptions.mode}",
           transaction_reference: "gate-ov-ref" + new Date().getTime(),
           reference: "ref" + new Date().getTime(),
           gateway_reference: "ov-ref" + new Date().getTime(),
-          narration: "Testing pay with pocket",
-          meta: {
-            transaction_id: "1234567890",
-            timestamp: "2023-05-24T14:30:00Z",
-            amount: 250.0,
-            currency: "NGN",
-            sender_account: "123456789",
-            recipient_account: "987654321",
-            transaction_type: "Transfer",
-            description: "Payment for services",
-            status: "Completed",
-          },
-          amount: 10000,
+          narration: "${pocketOptions.narration}",
+          meta: ${jsonEncode(pocketOptions.meta)},
+          amount: ${pocketOptions.amount},
           onSuccess(data) {
+            let response = {event:'option success', data}
+            window.FlutterOnSuccess.postMessage(JSON.stringify(response)) 
             console.log(JSON.stringify(data, null, 2));
           },
           onOpen() {
             console.log("init");
+            let response = {event:'option open'}
+            window.FlutterOnOpen.postMessage(JSON.stringify(response))
           },
           onPending() {
+            let response = {event:'option pending'}
+            window.FlutterOnPending.postMessage(JSON.stringify(response))
             console.log("pending");
           },
           onClose() {
+            let response = {event:'option close'}
+            window.FlutterOnClose.postMessage(JSON.stringify(response))
             console.log("close");
           },
           onError(err) {
+            let response = {event:'option error', err}
+            window.FlutterOnError.postMessage(JSON.stringify(response))
             console.log(err);
           },
         });

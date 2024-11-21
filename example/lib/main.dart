@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:pocket_app_flutter_sdk/pocket.dart';
 import 'package:pocket_app_flutter_sdk/pocket_app_flutter_sdk.dart';
 
 void main() {
@@ -40,11 +41,43 @@ class HomeScreen extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Pocket.buildWithOptions(context);
+                Pocket.buildWithOptions(
+                  context,
+                  PocketOption(
+                    key: "TPM_TEST_7bQG1GAUbc7PSzZ8oPYY45Gm17tlhYmxUVi",
+                    mode: "test",
+                    narration: "Testing pay with pocket",
+                    meta: {
+                      "transactionId": "1234567890",
+                      "timestamp": DateTime.now().toIso8601String(),
+                      "currency": "NGN",
+                      "senderAccount": "1234567890",
+                      "recipientAccount": "987654321",
+                      "transactionType": "Transfer",
+                      "description": "Payment for services",
+                      "status": "Completed",
+                    },
+                    amount: 4400000,
+                    onClose: (message) {
+                      log('onClose: $message');
+                    },
+                    onError: (message) {
+                      log('onError: $message');
+                    },
+                    onSuccess: (message) {
+                      log('onSuccess: $message');
+                    },
+                    onOpen: (message) {
+                      log('onOpen: $message');
+                    },
+                    onPending: (message) {
+                      log('onPending: $message');
+                    },
+                  ),
+                );
               },
               child: const Text('Pay with Pocket'),
             ),
-            PocketApp(),
           ],
         ),
       ),

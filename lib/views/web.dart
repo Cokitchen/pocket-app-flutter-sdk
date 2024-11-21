@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:pocket_app_flutter_sdk/model/pocket_option.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:pocket_app_flutter_sdk/raw/pocket_html.dart';
@@ -9,22 +11,15 @@ import 'package:pocket_app_flutter_sdk/raw/pocket_html.dart';
 class Web extends StatefulWidget {
   const Web({
     Key? key,
-    this.okraOptions,
-    this.shortUrl,
-    this.onSuccess,
-    this.onError,
-    this.onClose,
-    this.beforeClose,
-    this.onEvent,
+    required this.pocketOptions,
   }) : super(key: key);
 
-  final Map<String, dynamic>? okraOptions;
-  final String? shortUrl;
-  final Function(String data)? onSuccess;
-  final Function(String message)? onError;
-  final Function(String message)? onClose;
-  final Function(String message)? beforeClose;
-  final Function(String message)? onEvent;
+  final PocketOption pocketOptions;
+  // final Function(String data)? onSuccess;
+  // final Function(String message)? onError;
+  // final Function(String message)? onClose;
+  // final Function(String message)? onPending;
+  // final Function(String message)? onOpen;
 
   @override
   State<Web> createState() => _WebState();
@@ -46,10 +41,12 @@ class _WebState extends State<Web> {
           onMessageReceived: onFlutterError)
       ..addJavaScriptChannel("FlutterOnClose",
           onMessageReceived: onFlutterClose)
-      ..addJavaScriptChannel("FlutterBeforeClose",
-          onMessageReceived: onFlutterBeforeClose)
-      ..addJavaScriptChannel("FlutterOnEvent",
-          onMessageReceived: onFlutterEvent)
+      ..addJavaScriptChannel("FlutterOnPending",
+          onMessageReceived: onFlutterPending)
+      ..addJavaScriptChannel(
+        "FlutterOnOpen",
+        onMessageReceived: onFlutterOpen,
+      )
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: onPageLoaded,
@@ -62,37 +59,39 @@ class _WebState extends State<Web> {
         ),
       )
       ..setUserAgent("Flutter;Webview")
-      ..loadHtmlString(buildPocketWithOptions());
+      ..loadHtmlString(
+          buildPocketWithOptions(pocketOptions: widget.pocketOptions));
   }
 
   void onFlutterSuccess(JavaScriptMessage message) {
-    if (widget.onSuccess != null) {
-      widget.onSuccess!(message.message);
+    if (widget.pocketOptions.onSuccess != null) {
+      widget.pocketOptions.onSuccess!(message.message);
     }
   }
 
   void onFlutterError(JavaScriptMessage message) {
-    if (widget.onError != null) {
-      widget.onError!(jsonDecode(message.message)["data"]["error"].toString());
+    if (widget.pocketOptions.onError != null) {
+      widget.pocketOptions
+          .onError!(jsonDecode(message.message)["data"]["error"].toString());
     }
   }
 
   void onFlutterClose(JavaScriptMessage message) {
-    if (widget.onClose != null) {
-      widget.onClose!(message.message);
+    if (widget.pocketOptions.onClose != null) {
+      widget.pocketOptions.onClose!(message.message);
     }
     Navigator.pop(context);
   }
 
-  void onFlutterBeforeClose(JavaScriptMessage message) {
-    if (widget.beforeClose != null) {
-      widget.beforeClose!(message.message);
+  void onFlutterPending(JavaScriptMessage message) {
+    if (widget.pocketOptions.onPending != null) {
+      widget.pocketOptions.onPending!(message.message);
     }
   }
 
-  void onFlutterEvent(JavaScriptMessage message) {
-    if (widget.onEvent != null) {
-      widget.onEvent!(message.message);
+  void onFlutterOpen(JavaScriptMessage message) {
+    if (widget.pocketOptions.onOpen != null) {
+      widget.pocketOptions.onOpen!(message.message);
     }
   }
 
@@ -104,23 +103,39 @@ class _WebState extends State<Web> {
 
   @override
   Widget build(BuildContext context) {
+    log("PocketOptions: ${widget.pocketOptions}");
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 38.0, left: 16, right: 16),
-        child: Stack(
-          children: [
-            WebViewWidget(controller: _controller),
-            isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Container(width: 0, height: 0, color: Colors.transparent),
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20.0, left: 16, right: 16),
+          child: isLoading
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (widget.pocketOptions.onClose != null) {
+                          widget
+                              .pocketOptions.onClose!("{event:'option close'}");
+                        }
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                        size: 40,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 500,
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    ),
+                  ],
+                )
+              : WebViewWidget(controller: _controller),
         ),
       ),
     );
