@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                       "description": "Payment for services",
                       "status": "Completed",
                     },
-                    amount: 4400000,
+                    amount: 440000.00,
                     onClose: (message) {
                       log('onClose: $message');
                     },

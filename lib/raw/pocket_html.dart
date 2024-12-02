@@ -23,6 +23,7 @@ String buildPocketWithOptions({required PocketOption pocketOptions}) => """
         const pockett = new Pocket({
           key: "${pocketOptions.key}",
           mode: "${pocketOptions.mode}",
+          view:"${pocketOptions.view}",
           transaction_reference: "gate-ov-ref" + new Date().getTime(),
           reference: "ref" + new Date().getTime(),
           gateway_reference: "ov-ref" + new Date().getTime(),

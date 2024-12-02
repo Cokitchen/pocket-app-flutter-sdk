@@ -104,37 +104,45 @@ class _WebState extends State<Web> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20.0, left: 16, right: 16),
-          child: isLoading
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        if (widget.pocketOptions.onClose != null) {
-                          widget
-                              .pocketOptions.onClose!("{event:'option close'}");
-                        }
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.red,
-                        size: 40,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 500,
-                      child: Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
-                    ),
-                  ],
-                )
-              : WebViewWidget(controller: _controller),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: () {
+                if (widget.pocketOptions.onClose != null) {
+                  widget.pocketOptions.onClose!("{event:'option close'}");
+                }
+                Navigator.pop(context);
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(left: 24.0),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.red,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
         ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 10,
+        ),
+        child: isLoading
+            ? const SizedBox(
+                height: 500,
+                child: Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              )
+            : WebViewWidget(controller: _controller),
       ),
     );
   }

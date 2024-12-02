@@ -3,6 +3,7 @@ class PocketOption {
   final String? mode;
   final String? transactionReference;
   final String? reference;
+  final String? view;
   final String? gatewayReference;
   final String? narration;
   final Map<String, dynamic>? meta;
@@ -18,6 +19,7 @@ class PocketOption {
     this.mode,
     this.transactionReference,
     this.reference,
+    this.view,
     this.gatewayReference,
     this.narration,
     this.meta,
