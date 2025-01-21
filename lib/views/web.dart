@@ -113,7 +113,7 @@ class _WebState extends State<Web> {
             InkWell(
               onTap: () {
                 if (widget.pocketOptions.onClose != null) {
-                  widget.pocketOptions.onClose!("{event:'option close'}");
+                  widget.pocketOptions.onClose!("{event:'eventClose'}");
                 }
                 Navigator.pop(context);
               },
