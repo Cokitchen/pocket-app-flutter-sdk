@@ -33,7 +33,6 @@ String buildPocketWithOptions({required PocketOption pocketOptions}) => """
           onSuccess(data) {
             let response = {event:'eventSuccess', data}
             window.FlutterOnSuccess.postMessage(JSON.stringify(response)) 
-            console.log(JSON.stringify(data, null, 2));
           },
           onOpen() {
             console.log("init");
