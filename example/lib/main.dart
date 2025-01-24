@@ -44,7 +44,9 @@ class HomeScreen extends StatelessWidget {
                 Pocket.buildWithOptions(
                   context,
                   PocketOption(
-                    key: "TPM_TEST_7bQG1GAUbc7PSzZ8oPYY45Gm17tlhYmxUVi",
+                    key: "test_public_key_s6Y70Q4Uaki6RPaDtQmFp81i",
+                    // key: "TPM_TEST_7bQG1GAUbc7PSzZ8oPYY45Gm17tlhYmxUVi",
+                    // key: 'live_public_key_xax5pqm8AnAXYa1wGj54cJME',
                     mode: "test",
                     narration: "Testing pay with pocket",
                     meta: {
@@ -59,19 +61,19 @@ class HomeScreen extends StatelessWidget {
                     },
                     amount: 440000.00,
                     onClose: (message) {
-                      log('onClose: $message');
+                      log('example onClose: $message');
                     },
                     onError: (message) {
-                      log('onError: $message');
+                      log('example onError: $message');
                     },
                     onSuccess: (message) {
-                      log('onSuccess: $message');
+                      log('example onSuccess: $message');
                     },
                     onOpen: (message) {
-                      log('onOpen: $message');
+                      log('example onOpen: $message');
                     },
                     onPending: (message) {
-                      log('onPending: $message');
+                      log('example onPending: $message');
                     },
                   ),
                 );

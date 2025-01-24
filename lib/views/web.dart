@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -63,6 +64,7 @@ class _WebState extends State<Web> {
   }
 
   void onFlutterSuccess(JavaScriptMessage message) {
+    log('Pocket SDK Success: ${message.message}');
     if (widget.pocketOptions.onSuccess != null) {
       widget.pocketOptions.onSuccess!(message.message);
     }
@@ -104,28 +106,28 @@ class _WebState extends State<Web> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              onTap: () {
-                if (widget.pocketOptions.onClose != null) {
-                  widget.pocketOptions.onClose!("{event:'eventClose'}");
-                }
-                Navigator.pop(context);
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(left: 24.0),
-                child: Icon(
-                  Icons.close,
-                  color: Colors.red,
-                  size: 30,
-                ),
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     if (widget.pocketOptions.onClose != null) {
+            //       widget.pocketOptions.onClose!("{event:'eventClose'}");
+            //     }
+            //     Navigator.pop(context);
+            //   },
+            //   child: const Padding(
+            //     padding: EdgeInsets.only(left: 24.0),
+            //     child: Icon(
+            //       Icons.close,
+            //       color: Colors.red,
+            //       size: 30,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
