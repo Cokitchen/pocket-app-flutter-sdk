@@ -80,8 +80,9 @@ class _WebState extends State<Web> {
   void onFlutterClose(JavaScriptMessage message) {
     if (widget.pocketOptions.onClose != null) {
       widget.pocketOptions.onClose!(message.message);
+    } else {
+      Navigator.pop(context);
     }
-    Navigator.pop(context);
   }
 
   void onFlutterPending(JavaScriptMessage message) {
@@ -106,36 +107,36 @@ class _WebState extends State<Web> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // InkWell(
-            //   onTap: () {
-            //     if (widget.pocketOptions.onClose != null) {
-            //       widget.pocketOptions.onClose!("{event:'eventClose'}");
-            //     }
-            //     Navigator.pop(context);
-            //   },
-            //   child: const Padding(
-            //     padding: EdgeInsets.only(left: 24.0),
-            //     child: Icon(
-            //       Icons.close,
-            //       color: Colors.red,
-            //       size: 30,
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-      ),
+      // appBar: const PreferredSize(
+      //   preferredSize: Size.fromHeight(30),
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.end,
+      //     crossAxisAlignment: CrossAxisAlignment.start,
+      //     children: [
+      //       // InkWell(
+      //       //   onTap: () {
+      //       //     if (widget.pocketOptions.onClose != null) {
+      //       //       widget.pocketOptions.onClose!("{event:'eventClose'}");
+      //       //     }
+      //       //     Navigator.pop(context);
+      //       //   },
+      //       //   child: const Padding(
+      //       //     padding: EdgeInsets.only(left: 24.0),
+      //       //     child: Icon(
+      //       //       Icons.close,
+      //       //       color: Colors.red,
+      //       //       size: 30,
+      //       //     ),
+      //       //   ),
+      //       // ),
+      //     ],
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 16,
           right: 16,
-          top: 10,
+          top: 60,
         ),
         child: isLoading
             ? const SizedBox(
