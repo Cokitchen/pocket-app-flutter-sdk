@@ -66,7 +66,7 @@ class _WebState extends State<Web> {
                   // Fallback - open Play Store/App Store if app isn't installed
                   final storeUrl = Uri.parse(Platform.isAndroid
                       ? 'market://details?id=com.abegapp'
-                      : 'https://apps.apple.com/app/pocket/id309601447');
+                      : 'https://apps.apple.com/ng/app/pocketapp-send-manage-money/id1532676793');
                   if (await canLaunchUrl(storeUrl)) {
                     await launchUrl(storeUrl);
                   }
