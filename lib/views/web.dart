@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pocket_app_flutter_sdk/model/pocket_option.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:pocket_app_flutter_sdk/raw/pocket_html.dart';
@@ -50,9 +51,30 @@ class _WebState extends State<Web> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: onPageLoaded,
-          onNavigationRequest: (NavigationRequest request) {
-            if (Platform.isAndroid) {
-              return NavigationDecision.prevent;
+          onNavigationRequest: (NavigationRequest request) async {
+            // Check if the URL is a deep link or custom URL scheme
+            if (request.url.startsWith('pocketapp://')) {
+              try {
+                final Uri uri = Uri.parse(request.url);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalApplication,
+                  );
+                  return NavigationDecision.prevent;
+                } else {
+                  // Fallback - open Play Store/App Store if app isn't installed
+                  final storeUrl = Uri.parse(Platform.isAndroid
+                      ? 'market://details?id=com.abegapp'
+                      : 'https://apps.apple.com/app/pocket/id309601447');
+                  if (await canLaunchUrl(storeUrl)) {
+                    await launchUrl(storeUrl);
+                  }
+                  return NavigationDecision.prevent;
+                }
+              } catch (e) {
+                log('Error launching Pocket app: $e');
+              }
             }
             return NavigationDecision.navigate;
           },
