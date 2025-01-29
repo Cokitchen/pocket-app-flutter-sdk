@@ -1,0 +1,59 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+
+    <!-- <link rel="stylesheet" href="/dist/style.css"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pay with Pocket SDK</title>
+  </head>
+
+  <body cz-shortcut-listen="true">
+    <div id="app">
+      <button onclick="paynow()">Pay with pocket now</button>
+    </div>
+
+    <script src="https://pocket-checkout-sdk.netlify.app/checkout-sdk.js"></script>
+
+    <script>
+      function paynow() {
+        const ref = "ov-ref" + new Date().getTime();
+        const pockett = new Pocket({
+          key: "test_public_key_s6Y70Q4Uaki6RPaDtQmFp81i",
+          product_name: "testing pvb payment",
+          amount: 10000,
+          narration: "Description here",
+          reference: ref,
+          meta: {
+            user_id: "ovee",
+            email: "xceldeveloper@gmail.com",
+            amount: 10000,
+            product_name: "testing pvb payment",
+            narration: "Description here",
+            reference: ref,
+          },
+          onSuccess(data) {
+            console.log("success", JSON.stringify(data, null, 2));
+          },
+          onOpen() {
+            console.log("init");
+          },
+
+          onPending() {
+            console.log("pending");
+          },
+
+          onClose() {
+            console.log("close");
+          },
+
+          onError(err) {
+            console.log(err);
+          },
+        });
+
+        pockett.show();
+      }
+    </script>
+  </body>
+</html>

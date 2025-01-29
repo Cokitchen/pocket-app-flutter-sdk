@@ -23,6 +23,7 @@ String buildPocketWithOptions({required PocketOption pocketOptions}) => """
         const pockett = new Pocket({
           key: "${pocketOptions.key}",
           mode: "${pocketOptions.mode}",
+          view:"${pocketOptions.view.text}",
           transaction_reference: "gate-ov-ref" + new Date().getTime(),
           reference: "ref" + new Date().getTime(),
           gateway_reference: "ov-ref" + new Date().getTime(),
@@ -30,27 +31,26 @@ String buildPocketWithOptions({required PocketOption pocketOptions}) => """
           meta: ${jsonEncode(pocketOptions.meta)},
           amount: ${pocketOptions.amount},
           onSuccess(data) {
-            let response = {event:'option success', data}
+            let response = {event:'eventSuccess', data}
             window.FlutterOnSuccess.postMessage(JSON.stringify(response)) 
-            console.log(JSON.stringify(data, null, 2));
           },
           onOpen() {
             console.log("init");
-            let response = {event:'option open'}
+            let response = {event:'eventOpen'}
             window.FlutterOnOpen.postMessage(JSON.stringify(response))
           },
           onPending() {
-            let response = {event:'option pending'}
+            let response = {event:'eventPending'}
             window.FlutterOnPending.postMessage(JSON.stringify(response))
             console.log("pending");
           },
           onClose() {
-            let response = {event:'option close'}
+            let response = {event:'eventClose'}
             window.FlutterOnClose.postMessage(JSON.stringify(response))
             console.log("close");
           },
           onError(err) {
-            let response = {event:'option error', err}
+            let response = {event:'eventError', err}
             window.FlutterOnError.postMessage(JSON.stringify(response))
             console.log(err);
           },
